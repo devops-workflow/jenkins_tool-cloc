@@ -38,6 +38,7 @@ elif [ "$Count_Jobs" = 'GROUP' ]; then
     exclude="-type d -name '$3' -prune -o"
   fi
   #find $JENKINS_HOME/jobs -type d -name "$3" -prune -o -type d -path "$2" -name workspace -print > $file_list
+  echo "GROUP find cmd: find $JENKINS_HOME/jobs $exclude -type d -path '$2' -name workspace -print"
   find $JENKINS_HOME/jobs $exclude -type d -path "$2" -name workspace -print > $file_list
 else
   echo "ERROR: parameters not understood"
