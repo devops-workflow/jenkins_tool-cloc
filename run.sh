@@ -28,9 +28,14 @@ Count_Jobs=$1
 
 if [ $# -eq 0 ] || [ "$Count_Jobs" = 'ALL' ]; then
   # Report on all jobs on Jenkins server
-  # Good for Freestyle NOT maven or issues with builds on slaves ?
-  #find $JENKINS_HOME/jobs/ -type d -name workspace > $file_list
-  find $JENKINS_HOME/ -type d -name workspace > $file_list
+  if [ "$NODE_NAME" = "master" ]; then
+    # On master
+    find $JENKINS_HOME/jobs/ -type d -name workspace > $file_list
+  else
+    # On slaves
+    #find ~/workspace/ -type d -name workspace > $file_list
+    echo "$HOME/workspace/" > $file_list
+  fi
 elif [ "$Count_Jobs" = 'PROJECT' ]; then
   # Report on current project/job
   echo "$JENKINS_HOME/jobs/$2/workspace" > $file_list
