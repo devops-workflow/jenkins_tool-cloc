@@ -27,14 +27,18 @@ file_report=cloc.xml
 
 if [ $# -eq 0 ] || [ "$Count_Jobs" = 'ALL' ]; then
   # Report on all jobs on Jenkins server
-  find $JENKINS_HOME/jobs -type d -name workspace > $file_list
-elif [ "$Count_Jobs" = 'PROJECT']; then
+  find $JENKINS_HOME/jobs/ -type d -name workspace > $file_list
+elif [ "$Count_Jobs" = 'PROJECT' ]; then
   # Report on current project/job
   echo "$JENKINS_HOME/jobs/$2/workspace" > $file_list
   file_report="$JENKINS_HOME/jobs/$2/workspace/$file_report"
 elif [ "$Count_Jobs" = 'GROUP' ]; then
   # Report on a group of projects/jobs
-  find $JENKINS_HOME/jobs -type d -name "$3" -prune -o -type d -path "$2" -name workspace -print > $file_list
+  if [ -n "$3" ]; then
+    exclude="-type d -name '$3' -prune -o"
+  fi
+  #find $JENKINS_HOME/jobs -type d -name "$3" -prune -o -type d -path "$2" -name workspace -print > $file_list
+  find $JENKINS_HOME/jobs $exclude -type d -path "$2" -name workspace -print > $file_list
 else
   echo "ERROR: parameters not understood"
   exit 1
