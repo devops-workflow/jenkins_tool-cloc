@@ -44,5 +44,6 @@ else
   exit 1
 fi
 
-$cloc --by-file --xml --out=$file_report --list-file=$file_list
+rm -f $file_report
+$cloc --unix --by-file --xml --out=$file_report --list-file=$file_list
 
