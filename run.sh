@@ -11,10 +11,10 @@
 # Use with SLOCcount plugin
 #
 # Expected Jenkins job parameters:
-#   Count_Jobs  : ALL, PROJECT, or GROUP
-#   Project     : Job name to process
-#   Include     : For GROUP, find -name arg of things to include
-#   Exclude     : For GROUP, find -name arg of directories to exclude
+#   $1 Count_Jobs  : ALL, PROJECT, or GROUP
+#   $2 Project     : Job name to process
+#   $2 Include     : For GROUP, find -name arg of things to include
+#   $3 Exclude     : For GROUP, find -name arg of directories to exclude
 #
 # Examples:
 #   Process all jobs that start with 'Puppet_' except the ones that start with 'Puppet_Control'
@@ -24,6 +24,7 @@
 cloc=./cloc
 file_list=workspace_dirs
 file_report=cloc.xml
+Count_Jobs=$1
 
 if [ $# -eq 0 ] || [ "$Count_Jobs" = 'ALL' ]; then
   # Report on all jobs on Jenkins server
@@ -37,7 +38,6 @@ elif [ "$Count_Jobs" = 'GROUP' ]; then
   if [ -n "$3" ]; then
     exclude="-type d -name '$3' -prune -o"
   fi
-  #find $JENKINS_HOME/jobs -type d -name "$3" -prune -o -type d -path "$2" -name workspace -print > $file_list
   echo "GROUP find cmd: find $JENKINS_HOME/jobs $exclude -type d -path '$2' -name workspace -print"
   find $JENKINS_HOME/jobs $exclude -type d -path "$2" -name workspace -print > $file_list
 else
